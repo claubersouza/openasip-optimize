@@ -352,6 +352,28 @@ function dec_rv32d_opfp_fsgnjnd() {
 }
 
 function dec_rv32d_opfp_feqd() {
+    //console.log("teste2")
+    console.log("start\n");
+    console.log(new Instruction('11111110000000010000000100010011').asm);
+    console.log(new Instruction('00000000100000010010111000100011').asm);
+    console.log(new Instruction('00000010000000010000010000010011').asm);
+    console.log(new Instruction('00000000001000000000011110010011').asm);
+    console.log(new Instruction('11111110111101000010011000100011').asm);
+    console.log(new Instruction('00000000010000000000011110010011').asm);
+    console.log(new Instruction('11111110111101000010010000100011').asm);
+    console.log(new Instruction('11111110110001000010011100000011').asm);
+    console.log(new Instruction('11111110100001000010011110000011').asm);
+    console.log(new Instruction('00000000111101110000011110110011').asm);
+    console.log(new Instruction('11111110010001000010011110000011').asm);
+    console.log(new Instruction('00000000000001111000010100010011').asm);
+    console.log(new Instruction('00000001110000010010010000000011').asm);
+    console.log(new Instruction('00000010000000010000000100010011').asm);
+    console.log(new Instruction('00000000000000001000000001100111').asm);
+    console.log("\nstop");
+
+
+
+
     let inst = new Instruction('10100010010000101010001111010011');
     let instAbi = new Instruction('10100010010000101010001111010011', { ABI:true });
     assertEq(inst.asm, 'feq.d x7, f5, f4');
