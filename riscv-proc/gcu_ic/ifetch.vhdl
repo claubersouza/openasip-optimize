@@ -89,6 +89,8 @@ architecture rtl_andor of tta0_ifetch is
 
   -- internal signals for initializing and locking execution
   signal lock       : std_logic;
+  signal teste       : std_logic;
+  signal teste_in: integer := 8;
 
   signal reset_lock : std_logic;  
   constant IFETCH_DELAY : integer := 1;
@@ -119,10 +121,27 @@ begin
   -- propagate lock to global lock
   glock            <= busy or reset_lock or (not fetch_en);
   ra_out           <= return_addr_reg;
+  --fetch_en <= 0 when(im = '00000000000000100000000100010111');
 
   lock <= not fetch_en or busy;
 
   calla_address <=std_logic_vector(resize(unsigned(pc_in), 32) + unsigned(cond));
+
+  -- process (clk)
+  -- begin
+  --     if std_logic_vector(resize(unsigned(imem_data), 32)) = "00000000001000000000011110010011" then
+  --       lock <= '1';
+  --     end if;
+  -- end process;
+
+  -- process (fetchblock)
+  -- begin
+
+  --     if fetchblock = "11111110100001000010011110000011" then
+  --      pc_reg <= std_logic_vector(to_unsigned(teste_in, pc_reg'length));
+  --       --pc_reg <= std_logic_vector(resize(unsigned(teste_in), 32));
+  --       end if;
+  --   end process;
   
   process (clk, rstx)
   begin
@@ -143,6 +162,7 @@ begin
       signal   reset_cntr   : integer range 0 to IFETCH_DELAY;
       signal   pc_prev_prev_reg : std_logic_vector(IMEMADDRWIDTH-1 downto 0);
     begin
+
       control_pc <= pc_prev_prev_reg;
       control_pc_next <= pc_prev_reg;
       process(clk, rstx)
@@ -168,6 +188,9 @@ begin
           end if;
         end if;
       end process;
+      -- if std_logic_vector(resize(unsigned(imem_data), 32)) = "00000000001000000000011110010011" then
+      --   lock <= '1';
+      -- end if;
 
       fetchblock <= instruction_reg;
 
@@ -245,11 +268,16 @@ begin
   comp <=in2_data;
 
 
+  --when (lock = '0'  and ifetch_stall = '0')   else pc_prev_reg;
+
   -- increase program counter
   increased_pc <= std_logic_vector(unsigned(pc_reg) + IMEMWIDTHINMAUS);
 
   sel_next_pc : process (rv_jump, rv_offset, pc_load, pc_in, increased_pc, pc_opcode , take_cond_branch , calla_address, control_pc, control_pc_next)
   begin
+      --     if std_logic_vector(resize(unsigned(imem_data), 32)) = "00000000001000000000011110010011" then
+  --       lock <= '1';
+  --     end if;
       --branch
       if pc_load = '1' and unsigned(pc_opcode) = IFE_CALLA then
         next_pc <= calla_address(IMEMADDRWIDTH-1 downto 0);
@@ -261,7 +289,9 @@ begin
         next_pc <= std_logic_vector(unsigned(control_pc) + resize(unsigned(rv_offset), next_pc'length));
       --no branch
       else
-        next_pc <= increased_pc;
+        --next_pc <= "00000000001000000000011110010011" 
+        next_pc <= std_logic_vector(to_unsigned(teste_in, next_pc'length))
+        when (fetchblock = "00000000000000100000000100010111") else increased_pc;
       end if;
   end process sel_next_pc;
 
