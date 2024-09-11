@@ -25,6 +25,7 @@ use IEEE.std_logic_arith.all;
 use work.tta0_globals.all;
 use work.tta0_imem_mau.all;
 
+
 entity tta0_decompressor is
 
   port (
@@ -40,12 +41,44 @@ entity tta0_decompressor is
 end tta0_decompressor;
 
 architecture structural of tta0_decompressor is
-  
+  signal teste       : std_logic;
+  signal counter       : integer;
+  signal teste2 : unsigned(INSTRUCTIONWIDTH-1 downto 0);
+  --signal teste2 :  integer := 21894267136;
+  --signal teste2 : std_logic_vector(INSTRUCTIONWIDTH-1 downto 0) := "00000101000100000101010000000001000";
 begin  -- structural
+process (clk, rstx)
+  begin
+    if rstx = '0' then
+      teste <= '0';
+      counter <= 0;
+      elsif rising_edge(clk) then
+        counter <= counter + 1 ;
+        -- if instructionword = "0000010100010000010101000000000100000000" then
+        --     teste <= '1';
+        -- end if;
+        end if;
+  end process;
 
-  glock <= lock;
-  fetch_en <= not lock_r;
+  glock <= '0';
+  fetch_en <= '0' when (counter >= 4 and counter<=7 ) else '1';--- not lock_r;
   instructionword <= fetchblock(fetchblock'length-1 downto fetchblock'length-INSTRUCTIONWIDTH);
   
+  -- process (clk, rstx)
+  -- begin  -- process immediates
+  --   if rstx = '0' then
+  --     instructionword <= (others => '0');
+  --     teste2 <= unsigned(21894267136, 36);
+  --     elsif clk'event and clk = '1' then 
+      
+  --     if  counter = 5 then
+  --       instructionword <= std_logic_vector(teste2);
+  --     else    
+  --     instructionword <= fetchblock(fetchblock'length-1 downto fetchblock'length-INSTRUCTIONWIDTH);
+  --       end if ;
+  --     end if;
+  -- end process;
+    
+
 end structural;
 
