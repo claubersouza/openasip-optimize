@@ -61,7 +61,7 @@ process (clk, rstx)
   end process;
 
   glock <= '0';
-  fetch_en <= '0' when (counter >= 4 and counter<=7 ) else '1';--- not lock_r;
+  fetch_en <= '0' when (counter = 8 ) else '1';--- not lock_r;
   instructionword <= fetchblock(fetchblock'length-1 downto fetchblock'length-INSTRUCTIONWIDTH);
   
   -- process (clk, rstx)
