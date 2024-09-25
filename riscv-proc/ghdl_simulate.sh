@@ -95,5 +95,5 @@ if [ -e ${tb_entity} ]; then
     ./${tb_entity} --stop-time=${runtime}ns
 else
     # Newer GHDL versions does not produce binary.
-    ghdl -r ${std_version} --workdir=work --ieee=synopsys ${tb_entity} --stop-time=${runtime}ns --ieee-asserts=disable-at-0 ${generic_list}
+              ghdl -r ${std_version} --workdir=work --ieee=synopsys ${tb_entity} --vcd=dump.vcd --stop-time=${runtime}ns --ieee-asserts=disable-at-0 ${generic_list}
 fi

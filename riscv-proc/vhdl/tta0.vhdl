@@ -398,6 +398,16 @@ architecture structural of tta0 is
       simm_cntrl_B3 : in std_logic_vector(1-1 downto 0));
   end component;
 
+
+  component ifetch_virtual is 
+  port (
+    clk: in std_logic;
+    rstx : in std_logic;
+    glock_in : in std_logic;
+    instruction_out : in std_logic_vector(IMEMWIDTHINMAUS*IMEMMAUWIDTH-1 downto 0);
+    fetch_en: in std_logic);
+  end component;
+
   component rv32_microcode_wrapper is
     port (
       clk : in std_logic;

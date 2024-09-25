@@ -54,14 +54,30 @@ process (clk, rstx)
       counter <= 0;
       elsif rising_edge(clk) then
         counter <= counter + 1 ;
+
         -- if instructionword = "0000010100010000010101000000000100000000" then
         --     teste <= '1';
         -- end if;
         end if;
+        -- if counter = 8 then
+        --   fetch_en <= '1';
+        --   else 
+        --   fetch_en <= '0';
+        --   end if ;
   end process;
 
+  -- process (counter)
+  -- begin
+
+  --  if counter = 8 then
+  --   fetch_en <= '1';
+  --   else 
+  --   fetch_en <= '0';
+  --   end if ;
+  -- end process;
+
   glock <= '0';
-  fetch_en <= '0' when (counter = 8 ) else '1';--- not lock_r;
+  fetch_en <= '1' when (counter = 25 or counter = 26 or counter = 27) else '1';--- not lock_r;
   instructionword <= fetchblock(fetchblock'length-1 downto fetchblock'length-INSTRUCTIONWIDTH);
   
   -- process (clk, rstx)

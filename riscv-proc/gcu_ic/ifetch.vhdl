@@ -120,10 +120,10 @@ begin
   imem_addr <= pc_reg when (lock = '0'  and ifetch_stall = '0')   else pc_prev_reg;
 
   -- propagate lock to global lock
-  glock            <= '0';--busy or reset_lock or (not fetch_en);
+  glock            <= '0';--busy or reset_lock; --or (not fetch_en);
   ra_out           <= return_addr_reg;
   -- '1' when (imem_data = "11111110111101000010011000100011") else '0';
-  lock <= '0'; -- not fetch_en or busy; -- (imem_data(instruction_reg'length-1 downto 0) =) 
+  lock <=  '0'; --busy; -- (imem_data(instruction_reg'length-1 downto 0) =) 
 
   calla_address <=std_logic_vector(resize(unsigned(pc_in), 32) + unsigned(cond));
   
@@ -183,11 +183,17 @@ end generate instruction_reg_generate;
 
 process (imem_data,clk)
 begin
-  if fetch_en = '0' and rising_edge(clk) then
-    counter <= counter + 1 ;
-    fetchblock <= "11111110111101000010011000100011";
-    else
+  if  counter = 1 and fetch_en = '0'  then
+    fetchblock <= "00000000001001010001011000010011";
+    elsif  counter = 3 and fetch_en = '0'   then
+      fetchblock <= "00000000000000000001010100110111";
+      elsif  counter = 5 and fetch_en = '0'  then
+        fetchblock <= "10011001010001010000010100010011";
+        elsif fetch_en = '1' then
       fetchblock <=  imem_data(fetchblock'length-1 downto 0);
+    end if;
+    if  fetch_en = '0' then
+    counter <= counter + 1 ;
     end if;
 end process;
 
